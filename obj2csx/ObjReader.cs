@@ -29,6 +29,10 @@ namespace obj2csx
                 switch (type)
                 {
                     case "newmtl":
+                        if (!MtlLib.ContainsKey(currentmaterial))
+                        {
+                            MtlLib.Add(currentmaterial, currentmaterial);
+                        }
                         currentmaterial = line.Split(' ').Last();
                         break;
 
@@ -118,6 +122,11 @@ namespace obj2csx
                                         var p1 = Points[Convert.ToInt32(s1[0]) - 1];
                                         var p2 = Points[Convert.ToInt32(s2[0]) - 1];
                                         var p3 = Points[Convert.ToInt32(s3[0]) - 1];
+
+                                        face.v1 = currentgroup.Points.Count;
+                                        face.v2 = currentgroup.Points.Count + 1;
+                                        face.v3 = currentgroup.Points.Count + 2;
+
                                         currentgroup.Points.Add(p1);
                                         currentgroup.Points.Add(p2);
                                         currentgroup.Points.Add(p3);
@@ -125,52 +134,56 @@ namespace obj2csx
                                         var uv1 = UV[Convert.ToInt32(s1[1]) - 1];
                                         var uv2 = UV[Convert.ToInt32(s2[1]) - 1];
                                         var uv3 = UV[Convert.ToInt32(s3[1]) - 1];
+
+                                        face.uv1 = currentgroup.UV.Count;
+                                        face.uv2 = currentgroup.UV.Count + 1;
+                                        face.uv3 = currentgroup.UV.Count + 2;
+
                                         currentgroup.UV.Add(uv1);
                                         currentgroup.UV.Add(uv2);
                                         currentgroup.UV.Add(uv3);
-
-                                        face.v1 = currentgroup.Points.IndexOf(p1);
-                                        face.v2 = currentgroup.Points.IndexOf(p2);
-                                        face.v3 = currentgroup.Points.IndexOf(p3);
-                                        face.uv1 = currentgroup.UV.IndexOf(uv1);
-                                        face.uv2 = currentgroup.UV.IndexOf(uv2);
-                                        face.uv3 = currentgroup.UV.IndexOf(uv3);
                                     }
                                     if (s1.Length == 3)
                                     {
                                         var p1 = Points[Convert.ToInt32(s1[0]) - 1];
                                         var p2 = Points[Convert.ToInt32(s2[0]) - 1];
                                         var p3 = Points[Convert.ToInt32(s3[0]) - 1];
+
+                                        face.v1 = currentgroup.Points.Count;
+                                        face.v2 = currentgroup.Points.Count + 1;
+                                        face.v3 = currentgroup.Points.Count + 2;
+
                                         currentgroup.Points.Add(p1);
                                         currentgroup.Points.Add(p2);
                                         currentgroup.Points.Add(p3);
-                                        face.v1 = currentgroup.Points.IndexOf(p1);
-                                        face.v2 = currentgroup.Points.IndexOf(p2);
-                                        face.v3 = currentgroup.Points.IndexOf(p3);
 
                                         if (s1[1] != "")
                                         {
                                             var uv1 = UV[Convert.ToInt32(s1[1]) - 1];
                                             var uv2 = UV[Convert.ToInt32(s2[1]) - 1];
                                             var uv3 = UV[Convert.ToInt32(s3[1]) - 1];
+
+                                            face.uv1 = currentgroup.UV.Count;
+                                            face.uv2 = currentgroup.UV.Count + 1;
+                                            face.uv3 = currentgroup.UV.Count + 2;
+
                                             currentgroup.UV.Add(uv1);
                                             currentgroup.UV.Add(uv2);
                                             currentgroup.UV.Add(uv3);
-                                            face.uv1 = currentgroup.UV.IndexOf(uv1);
-                                            face.uv2 = currentgroup.UV.IndexOf(uv2);
-                                            face.uv3 = currentgroup.UV.IndexOf(uv3);
                                         }
                                         if (s1[2] != "")
                                         {
                                             var n1 = Normals[Convert.ToInt32(s1[2]) - 1];
                                             var n2 = Normals[Convert.ToInt32(s2[2]) - 1];
                                             var n3 = Normals[Convert.ToInt32(s3[2]) - 1];
+
+                                            face.n1 = currentgroup.Normals.Count;
+                                            face.n2 = currentgroup.Normals.Count + 1;
+                                            face.n3 = currentgroup.Normals.Count + 2;
+
                                             currentgroup.Normals.Add(n1);
                                             currentgroup.Normals.Add(n2);
                                             currentgroup.Normals.Add(n3);
-                                            face.n1 = currentgroup.Normals.IndexOf(n1);
-                                            face.n2 = currentgroup.Normals.IndexOf(n2);
-                                            face.n3 = currentgroup.Normals.IndexOf(n3);
                                         }
                                     }
                                 }
@@ -180,13 +193,13 @@ namespace obj2csx
                                     var p2 = Points[Convert.ToInt32(i2) - 1];
                                     var p3 = Points[Convert.ToInt32(i3) - 1];
 
+                                    face.v1 = currentgroup.Points.Count;
+                                    face.v2 = currentgroup.Points.Count + 1;
+                                    face.v3 = currentgroup.Points.Count + 2;
+
                                     currentgroup.Points.Add(p1);
                                     currentgroup.Points.Add(p2);
                                     currentgroup.Points.Add(p3);
-
-                                    face.v1 = currentgroup.Points.IndexOf(p1);
-                                    face.v2 = currentgroup.Points.IndexOf(p2);
-                                    face.v3 = currentgroup.Points.IndexOf(p3);
                                 }
 
                                 currentgroup.Faces.Add(face);

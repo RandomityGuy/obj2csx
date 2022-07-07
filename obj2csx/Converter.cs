@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using DifNet.Mesh;
 using System.Linq;
 
 namespace obj2csx
@@ -58,8 +57,6 @@ namespace obj2csx
                     for (int k = 0; k < group.Faces.Count; k++)
                     {
                         Face face = group.Faces[k];
-                        sw.Write("                      <Brush id=\"" + id + "\" owner=\"0\" type=\"0\" pos=\"0 0 -0.05\" transform=\"1 0 0 0 0 1 0 0 0 0 1 -0.05 0 0 0 1\" group=\"-1\" locked=\"0\" nextFaceID=\"" + "5" + "\" nextVertexID=\"" + "5" + "\">" +
-        Environment.NewLine + "                       <Vertices>" + Environment.NewLine);
 
                         List<Vector3> vertices = new List<Vector3>();
                         var p1 = group.Points[face.v1];
@@ -67,6 +64,15 @@ namespace obj2csx
                         var p3 = group.Points[face.v3];
 
                         var n = ((p2 - p1) * (p2 - p3)).Normalize();
+
+                        if (float.IsNaN(n.X) || float.IsNaN(n.Y) || float.IsNaN(n.Z))
+                        {
+                            continue; // Don't export 'linear' faces
+                        }
+
+                        sw.Write("                      <Brush id=\"" + id + "\" owner=\"0\" type=\"0\" pos=\"0 0 -0.05\" transform=\"1 0 0 0 0 1 0 0 0 0 1 -0.05 0 0 0 1\" group=\"-1\" locked=\"0\" nextFaceID=\"" + "5" + "\" nextVertexID=\"" + "5" + "\">" +
+Environment.NewLine + "                       <Vertices>" + Environment.NewLine);
+
                         n = n.Scalar(-1 / 20f);
                         var p4 = (p1 + p2 + p3).Scalar(1 / 3f) + n;
 
@@ -85,7 +91,9 @@ namespace obj2csx
                         //    vertices.Add(obj.Points[index - 1]);
                         //}
                         foreach (var vertex in vertices)
+                        {
                             sw.WriteLine("                          <Vertex pos=\"" + vertex.ToString() + "\" />");
+                        }
                         sw.WriteLine("                      </Vertices>");
 
 
